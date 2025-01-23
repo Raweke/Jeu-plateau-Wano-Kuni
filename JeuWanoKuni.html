@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeu de Plateau - Wano Kuni</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Gauche : Info persos -->
+    <div id="info-panel">
+      <h1>Wano Kuni</h1>
+      <div id="character-stats">
+        <div id="jack-stats" class="stats">
+          <strong>Nom : Jack</strong>
+          <img src="jack.png" alt="Jack" class="character-image">
+          <progress id="healthbar_jack" value="100" max="100"></progress>
+          <p>Santé : <span id="jack-health">100</span>%</p>
+          <img src="shuriken.png" alt="Shuriken" class="current-weapon" id="jack-current">
+          <p>Arme : <span id="jack-weapon">Shuriken</span></p>
+          <p>Dégats : <span id="jack-damage">10 points</span></p>
+          <p>Position : <span id="jack-position">(0, 0)</span></p>
+        </div>
+        <div id="kinemon-stats" class="stats">
+          <strong>Nom : Kinemon</strong>
+          <img src="kinemon.png" alt="Kinemon" class="character-image">
+          <progress id="healthbar_kinamon" value="100" max="100"></progress>
+          <p>Santé : <span id="kinemon-health">100</span>%</p>
+          <img src="shuriken.png" alt="Shuriken" class="current-weapon" id="kinemon-current">
+          <p>Arme : <span id="kinemon-weapon">Shuriken</span></p>
+          <p>Dégats : <span id="kinemon-damage">10 points</span></p>
+          <p>Position : <span id="kinemon-position">(11, 14)</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Droite : Grille -->
+    <div id="game-panel">
+      <div id="board" class="board"></div>
+    </div>
+  </div>
+
+  <div id="weapons-panel">
+    <div class="weapon-card">
+      <img src="shuriken.png" alt="Shuriken">
+      <p>Shuriken</p>
+      <p>Dégâts : 10</p>
+    </div>
+    <div class="weapon-card">
+      <img src="bow.png" alt="Arc">
+      <p>Arc</p>
+      <p>Dégâts : 15</p>
+    </div>
+    <div class="weapon-card">
+      <img src="massue.png" alt="Massue">
+      <p>Massu</p>
+      <p>Dégâts : 20</p>
+    </div>
+    <div class="weapon-card">
+      <img src="katana.png" alt="Katana">
+      <p>Katana</p>
+      <p>Dégâts : 25</p>
+    </div>
+    <div class="weapon-card">
+      <img src="double.png" alt="Double Lame">
+      <p>Double Lame</p>
+      <p>Dégâts : 30</p>
+    </div>
+  </div>
+ 
+  <script src="script.js"></script>
+</body>
+</html>
+
