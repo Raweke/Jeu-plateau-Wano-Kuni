@@ -7,7 +7,7 @@ body {
   
 .container {
     display: flex;
-  }
+}
   
 #info-panel {
     width: 25%;
@@ -99,11 +99,11 @@ body {
     margin: 5px;
     font-size: 16px;
     cursor: pointer;
-  }
+}
   
   button:hover {
     background-color: #ddd;
-  }
+}
   
 .board {
     display: grid;

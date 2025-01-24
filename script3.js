@@ -214,7 +214,14 @@ function updateStats() {
 function renderBoard() {
   generateBoard();
   updateStats();
+  if(areAdjacent())
+    {
+        startCombat(currentPlayer);
+    }else{
+        highlightValidMoves(currentPlayer);
+    }
 }
+
 
 //Initialisation
 document.getElementById("restart-btn").addEventListener("click", () => restartGame);
