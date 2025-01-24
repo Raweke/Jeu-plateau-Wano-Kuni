@@ -69,17 +69,41 @@ body {
 }
    
 .weapon-card img {
-    width: 60px; /* Taille des images */
+    width: 60px; 
     height: 60px;
-    object-fit: contain; /* Ajuste l'image sans la déformer */
-    margin-bottom: 10px; /* Espacement sous l'image */
+    object-fit: contain; 
+    margin-bottom: 10px; 
 }
   
 .weapon-card p {
-    margin: 5px 0; /* Espacement entre les paragraphes */
-    font-size: 14px; /* Taille de texte adaptée */
-    color: #000; /* Texte en noir */
+    margin: 5px 0;
+    font-size: 14px;
+    color: #000; 
 }
+  
+#combat-panel {
+    margin-top: 20px;
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border: 2px solid #000;
+  }
+  
+  #restart-panel {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #ddd;
+  }
   
 .board {
     display: grid;
@@ -99,16 +123,36 @@ body {
 }
 
 .cell.valid {
-    background-color: #aaf; /* Indique que la case est cliquable */
+    background-color: #aaaaff; 
     cursor: pointer;
+    animation: glow 1s infinite;
 }
-  
+
+/*
+@keyframes glow {
+    0% {
+      box-shadow: 0 0 5px #aaaaff; // Couleur de brillance initiale 
+    }
+    50% {
+      box-shadow: 0 0 20px #aaaaff;  //Brillance maximale 
+    }
+    100% {
+      box-shadow: 0 0 5px #aaaaff;  //Retour à la brillance initiale 
+    }
+  }
+*/
+
 .character-icon {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
-  
+
+.cell.valid:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
