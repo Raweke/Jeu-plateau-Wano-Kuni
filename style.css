@@ -3,156 +3,239 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
     background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-  
+
 .container {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1200px;
 }
-  
+
 #info-panel {
-    width: 25%;
+    width: 30%;
+    min-width: 280px;
     padding: 20px;
     background-color: #ffffff;
     text-align: center;
-    margin-bottom: 20px;
+    border-radius: 8px;
+    margin: 10px;
 }
-  
-  
+
 .stats {
     margin-bottom: 20px;
     text-align: center;
     border: 1px solid #ddd;
     padding: 10px;
+    border-radius: 8px;
 }
 
-#jack-stats{
+#jack-stats {
     background-color: #e9ff7a;
 }
 
-#kinemon-stats{
+#kinemon-stats {
     background-color: #ff8484;
-}
-  
-.character-image {
-    width: 80px;
-    height: 80px;
-    display: block;
-    margin: 10px auto;
 }
 
 .current-weapon{
     width: 40px;
     height: 40px;
 }
-  
-#game-panel {
-    width: 75%;
+
+.character-image {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 10px auto;
+}
+
+ #game-panel {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    width: 60%;
+    min-width: 320px;
 }
 
-#weapons-panel {
-    display: flex;
-    justify-content: center; 
-    margin-left: 100px;
-    gap: 15px; 
-}
-  
-.weapon-card {
-    background-color: #89CFF0; 
-    border: 1px solid #007BFF; 
-    border-radius: 10px; 
-    width: 120px; 
-    text-align: center; 
-    padding: 10px; 
-}
-   
-.weapon-card img {
-    width: 60px; 
-    height: 60px;
-    object-fit: contain; 
-    margin-bottom: 10px; 
-}
-  
-.weapon-card p {
-    margin: 5px 0;
-    font-size: 14px;
-    color: #000; 
-}
-  
-#combat-panel {
-    margin-top: 20px;
-    text-align: center;
-    background-color: #f5f5f5;
-    padding: 20px;
-    border: 2px solid #000;
-  }
-  
-  #restart-panel {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  button {
-    padding: 10px 20px;
-    margin: 5px;
-    font-size: 16px;
-    cursor: pointer;
-}
-  
-  button:hover {
-    background-color: #ddd;
-}
-  
 .board {
     display: grid;
     grid-template-columns: repeat(15, 1fr);
     grid-template-rows: repeat(12, 1fr);
-    gap: 1px;
-    width: 750px;
-    height: 600px;
+    gap: 2px;
+    width: 90vw;  
+    max-width: 600px;
+    height: auto;
+    aspect-ratio: 15 / 12; 
     background-color: antiquewhite;
     background-size: cover;
+    border-radius: 8px;
 }
-  
+
+
 .cell {
-    background-color: rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0.6);
     border: 1px solid #000000;
     position: relative;
+    aspect-ratio: 1; 
 }
 
 .cell.valid {
-    background-color: #aaaaff; 
+    background-color: #89CFF0;
     cursor: pointer;
-    animation: glow 1s infinite;
+    animation: glow 1s infinite alternate;
 }
 
-/*
+.cell img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
 @keyframes glow {
-    0% {
-      box-shadow: 0 0 5px #aaaaff; // Couleur de brillance initiale 
-    }
-    50% {
-      box-shadow: 0 0 20px #aaaaff;  //Brillance maximale 
-    }
-    100% {
-      box-shadow: 0 0 5px #aaaaff;  //Retour à la brillance initiale 
-    }
-  }
-*/
+    0% { box-shadow: 0 0 5px #89CFF0; }
+    100% { box-shadow: 0 0 15px #37a7db; }
+}
+
+.cell.valid:hover {
+    transform: translateY(-3px);
+    transition: transform 0.2s ease-in-out;
+}
 
 .character-icon {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.cell.valid:hover {
-    transform: translateY(-5px); 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+#weapons-panel {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 10px 0;
+    gap: 10px;
+}
+
+.weapon-card {
+    background-color: #89CFF0;
+    border: 1px solid #007BFF;
+    border-radius: 10px;
+    width: 100px;
+    text-align: center;
+    padding: 10px;
+}
+
+.weapon-card img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin-bottom: 5px;
+}
+
+#combat-panel, #restart-panel {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 8px;
+    margin-top: 20px;
+    width: 80%;
+    max-width: 400px;
+}
+
+.combat-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+}
+
+button:hover {
+    background-color: #218838;
+  }
+
+#jack-combat-buttons,
+#kinemon-combat-buttons {
+  display: none;
+}
+
+.obstacle-icon {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #info-panel, #game-panel {
+        width: 90%;
+    }
+
+    .board {
+        width: 95vw;
+        max-width: 500px;
+    }
+
+    .weapon-card {
+        width: 80px;
+    }
+
+    .character-icon {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+
+.stats.tremble{
+    animation: tremble 1s ease;
+}
+  
+@keyframes flash-jack {
+    0% { background-color: #e9ff7a; }
+    50% { background-color: #ffeb3b; }
+    100% { background-color: #e9ff7a; }
+  }
+  
+  .flash-jack {
+    animation: flash-jack 1s ease-in-out;
+  }
+  
+
+  @keyframes flash-kinemon {
+    0% { background-color: #ff8484; }
+    50% { background-color: #ff4c4c; }
+    100% { background-color: #ff8484; }
+  }
+  
+.flash-kinemon {
+    animation: flash-kinemon 1s ease-in-out;
 }

@@ -4,12 +4,22 @@ const board = document.getElementById("board");
 
 let jackPos = null; 
 let kinemonPos = null; 
-let currentPlayer = "jack"; 
+let currentPlayer = "kinemon"; 
 let jackHealth = 100;
 let kinemonHealth = 100;
 let jackWeaponDamage = 10;
 let kinemonWeaponDamage = 10;
 let isDefending = {jack: false, kinemon: false};
+let obstacles = [];
+let weapons = []; 
+const weaponTypes = [
+  { name: "Shuriken", damage: 10, image: "shuriken.png" },
+  { name: "Arc", damage: 15, image: "bow.png" },
+  { name: "Massue", damage: 20, image: "massue.png" },
+  { name: "Katana", damage: 25, image: "katana.png" },
+  { name: "Double Lame", damage: 30, image: "double.png" },
+];
+
 
 
 //Générer une pos aléatoire
@@ -43,41 +53,127 @@ function placeRandomly() {
     do {
         randomPos = generateRandomPos();
     } while (verifyPos(randomPos, jackPos));
-        kinemonPos = randomPos;
+
+    kinemonPos = randomPos;
 }
 
-function startCombat(attacker)
-{
-    const combatPanel = document.getElementById("combat-panel");
-    combatPanel.style.display = "block";
-    
-    const attackBtn = document.getElementById("attack-btn");
-    const defendBtn = document.getElementById("defend-btn");
-    const combatLog = document.getElementById("combat-log");
 
-    combatLog.textContent = `${attacker} commence le combat !`;
+function generateObstacles(count) {
+  obstacles = []; 
+  while (obstacles.length < count) {
+    let newObstacle = generateRandomPos();
 
-    let currentAttacker = attacker;
-    let currentDefender = currentAttacker === "jack" ? "kinemon" : "jack";
+    if (
+      !verifyPos(newObstacle, jackPos) &&
+      !verifyPos(newObstacle, kinemonPos) &&
+      !obstacles.some((obstacle) => verifyPos(newObstacle, obstacle))
+    ) {
+      obstacles.push(newObstacle);
+    }
+  }
+}
 
-    attackBtn.onclick = () => {
-        const damage = currentAttacker === "jack" ? jackWeaponDamage : kinemonWeaponDamage;
-        if(isDefending[currentDefender])
-        {
-            combatLog.textContent = `${currentDefender} a bloqué l'attaque de ${currentAttacker}!`;
-            isDefending[currentDefender] = false;
-        }else{
-            if(currentDefender === "jack") jackHealth -= damage;
-            combatLog.textContent = `${currentAttacker} inflige ${damage} points de dégâts à ${currentDefender} !`;
-        }
-        checkVictory();
-        switchTurn();
-    };
+function generateWeapons(maxWeapons = 4) {
+  weapons = []; 
+
+  while (weapons.length < maxWeapons) {
+    let newWeaponPos = generateRandomPos();
+   
+    if (
+      !weapons.some((weapon) => verifyPos(newWeaponPos, weapon.position)) &&
+      !obstacles.some((obs) => isSamePos(newWeaponPos, obs)) &&
+      !isSamePos(newWeaponPos, jackPos) &&
+      !isSamePos(newWeaponPos, kinemonPos)
+    ) {
+      const weaponType = weaponTypes[Math.floor(Math.random() * weaponTypes.length)];
+      weapons.push({ ...weaponType, position: newWeaponPos });
+    }
+  }
+}
+
+function spawnNewWeapon() {
+  let newWeaponPos;
+  do {
+    newWeaponPos = generateRandomPos();
+  } while (
+    weapons.some((weapon) => verifyPos(newWeaponPos, weapon.position)) || //as être adjacent à une autre arme
+    obstacles.some((obs) => isSamePos(newWeaponPos, obs)) || //pas être sur un obstacle
+    isSamePos(newWeaponPos, jackPos) || //pas être sur Jack
+    isSamePos(newWeaponPos, kinemonPos) //pas être sur Kinemon
+  );
+
+  const weaponType = weaponTypes[Math.floor(Math.random() * weaponTypes.length)];
+  weapons.push({ ...weaponType, position: newWeaponPos });
+  renderBoard();
+}
+
+
+function startCombat(attacker) {
+
+  document.getElementById("jack-combat-buttons").style.display = "none";
+  document.getElementById("kinemon-combat-buttons").style.display = "none";
+
+  document.getElementById(`${attacker}-combat-buttons`).style.display = "flex";
+
+  let currentAttacker = attacker;
+  let currentDefender = currentAttacker === "jack" ? "kinemon" : "jack";
+
+  const attackBtn = document.getElementById(`${currentAttacker}-attack-btn`);
+  const defendBtn = document.getElementById(`${currentAttacker}-defend-btn`);
+  const swordSound = document.getElementById("sword-sound");
+
+  attackBtn.onclick = () => {
+    const damage = currentAttacker === "jack" ? jackWeaponDamage : kinemonWeaponDamage;
+    const defenderStats = currentDefender === "jack" ? document.getElementById("jack-stats") : document.getElementById("kinemon-stats");
+
+    if (isDefending[currentDefender]) {
+      isDefending[currentDefender] = false; 
+
+    }else{
+      swordSound.currentTime = 0; 
+      swordSound.play();
+
+      if (currentDefender === "jack") {
+        jackHealth = Math.max(jackHealth - damage, 0);
+        document.getElementById("healthbar_jack").value = jackHealth;
+        document.getElementById("jack-health").textContent = jackHealth ;
+      } else {
+        kinemonHealth = Math.max(kinemonHealth - damage, 0);
+        document.getElementById("healthbar_kinamon").value = kinemonHealth;
+        document.getElementById("kinemon-health").textContent = kinemonHealth;
+      }
+
+      defenderStats.classList.add(`flash-${currentDefender}`);
+      setTimeout(() => defenderStats.classList.remove(`flash-${currentDefender}`), 1000);
+    }
+
+    checkVictory();
+    switchTurn();
+  };
+
+  defendBtn.onclick = () => {
+    isDefending[currentAttacker] = true;
+    switchTurn();
+  };
+}
+
+function animateDamage(statsId) {
+  const statsElement = document.getElementById(statsId);
+  statsElement.classList.add("tremble", "flash");
+  setTimeout(() => {
+    statsElement.classList.remove("tremble", "flash");
+  }, 1000);
 }
 
 function switchTurn()
 {
     [currentAttacker, currentDefender] = [currentDefender, currentAttacker];
+
+    document.getElementById(`${currentDefender}-combat-buttons`).style.display = "none";
+
+    // Afficher les boutons du nouvel attaquant
+    document.getElementById(`${currentAttacker}-combat-buttons`).style.display = "flex";
+
 }
 
 
@@ -85,8 +181,9 @@ function checkVictory()
 {
     if(jackHealth <=0 || kinemonHealth <= 0)
     {
-        const winner = jackHealth > 0 ? "Jack" : "Kinemon";
-        showWinner(winner);
+      const winner = jackHealth > 0 ? "Jack" : "Kinemon";
+        alert(`${winner} a gagné !`);
+      restartGame();
     }
 }
 
@@ -101,16 +198,15 @@ function showWinner()
     winnerMessage.textContent = `${winner} a gagné !`;
 }
 
-function restartGame()
-{
-    const restartPanel = document.getElementById("restart-panel");
-    restartPanel.style.display = "none";
-    jackHealth = 100;
-    kinemonHealth = 100;
-    isDefending = { jack: false, kinemon: false };
-    placeRandomly();
-    renderBoard();
-    highlightValidMoves(currentPlayer);
+function restartGame() {
+  jackHealth = 100;
+  kinemonHealth = 100;
+  document.getElementById("jack-combat-buttons").style.display = "none";
+  document.getElementById("kinemon-combat-buttons").style.display = "none";
+  isDefending = { jack: false, kinemon: false };
+  placeRandomly();
+  generateObstacles(10);
+  renderBoard();
 }
 
 
@@ -136,6 +232,7 @@ function highlightValidMoves(character) {
         //Vérif limite grille et cases occupées
         if (newX >= 0 && newX < cols &&   //limite grille en x
             newY >= 0 &&newY < rows &&    //limite grille en y
+            !obstacles.some((obstacle) => obstacle.x === newX && obstacle.y === newY) && //pas d'obstacle
             !(newX === jackPos.x && newY === jackPos.y) &&  //pas occupée par jack
             !(newX === kinemonPos.x && newY === kinemonPos.y)   //pas occupée par jack
         ) {
@@ -155,16 +252,31 @@ function highlightValidMoves(character) {
 function moveCharacter(character, x, y) {
     if (character === "jack") {
       jackPos = { x, y };
+      const weapon = weapons.find((weapon) => isSamePos(weapon.position, jackPos));
+      if (weapon) {
+        jackWeaponDamage = weapon.damage;
+        document.getElementById("jack-weapon").textContent = weapon.name;
+        document.getElementById("jack-damage").textContent = `${weapon.damage} points`;
+        document.getElementById("jack-current").src = weapon.image;
+        weapons = weapons.filter((w) => !isSamePos(w.position, jackPos)); //supprime arme recup
+        spawnNewWeapon();  //fais apparaitre une autre apres 2 tours
+      }
     } else {
       kinemonPos = { x, y };
+      const weapon = weapons.find((weapon) => isSamePos(weapon.position, kinemonPos));
+      if (weapon) {
+        kinemonWeaponDamage = weapon.damage;
+        document.getElementById("kinemon-weapon").textContent = weapon.name;
+        document.getElementById("kinemon-damage").textContent = `${weapon.damage} points`;
+        document.getElementById("kinemon-current").src = weapon.image;
+        weapons = weapons.filter((w) => !isSamePos(w.position, kinemonPos)); //Supprimer l'arme récupérée
+        spawnNewWeapon(); //Réapparaître une arme après 2 tours
+      }
     }
-  
-    
     currentPlayer = currentPlayer === "jack" ? "kinemon" : "jack";
   
-    //Afficher grille avec cases valides en surbrillance 
+    //Afficher grille avec cases valides en surbrillance
     renderBoard();
-    highlightValidMoves(currentPlayer);
   }
 
 //Génerer grille
@@ -196,6 +308,23 @@ function generateBoard() {
         cell.appendChild(kinemonIcon);
       }
 
+      if (obstacles.some((obstacle) => obstacle.x === x && obstacle.y === y)) {
+        const obstacleIcon = document.createElement("img");
+        obstacleIcon.src = "obstacle.png";
+        obstacleIcon.alt = "Obstacle";
+        obstacleIcon.classList.add("obstacle-icon");
+        cell.appendChild(obstacleIcon);
+      }
+
+      if (weapons.some((weapon) => isSamePos(weapon.position, { x, y }))) {
+        const weapon = weapons.find((weapon) => isSamePos(weapon.position, { x, y }));
+        const weaponIcon = document.createElement("img");
+        weaponIcon.src = weapon.image;
+        weaponIcon.alt = weapon.name;
+        weaponIcon.classList.add("character-icon");
+        cell.appendChild(weaponIcon);
+      }
+
       board.appendChild(cell);
     }
   }
@@ -224,7 +353,9 @@ function renderBoard() {
 
 
 //Initialisation
-document.getElementById("restart-btn").addEventListener("click", () => restartGame);
+document.getElementById("restart-btn").addEventListener("click", () => restartGame());
 placeRandomly();
+generateObstacles(10);
+generateWeapons();
 renderBoard();
-highlightValidMoves();
+

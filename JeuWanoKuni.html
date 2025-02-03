@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jeu de Plateau - Wano Kuni</title>
   <link rel="stylesheet" href="style.css">
+  <audio id="sword-sound" src="sword cut.mp3"></audio>
 </head>
 <body>
   <div class="container">
@@ -21,6 +22,11 @@
           <p>Arme : <span id="jack-weapon">Shuriken</span></p>
           <p>Dégats : <span id="jack-damage">10 points</span></p>
           <p>Position : <span id="jack-position">(0, 0)</span></p>
+          <!--Bouton combat-->
+          <div class="combat-buttons" id="jack-combat-buttons" style="display: none;">
+            <button id="jack-attack-btn">Attaquer</button>
+            <button id="jack-defend-btn">Défendre</button>
+          </div>
         </div>
         <div id="kinemon-stats" class="stats">
           <strong>Nom : Kinemon</strong>
@@ -31,6 +37,11 @@
           <p>Arme : <span id="kinemon-weapon">Shuriken</span></p>
           <p>Dégats : <span id="kinemon-damage">10 points</span></p>
           <p>Position : <span id="kinemon-position">(11, 14)</span></p>
+          <!--Bouton combat-->
+          <div class="combat-buttons" id="kinemon-combat-buttons" style="display: none;">
+            <button id="kinemon-attack-btn">Attaquer</button>
+            <button id="kinemon-defend-btn">Défendre</button>
+          </div> 
         </div>
       </div>
     </div>
@@ -54,7 +65,7 @@
     </div>
     <div class="weapon-card">
       <img src="massue.png" alt="Massue">
-      <p>Massu</p>
+      <p>Massue</p>
       <p>Dégâts : 20</p>
     </div>
     <div class="weapon-card">
