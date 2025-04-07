@@ -73,7 +73,11 @@ body {
     max-width: 600px;
     height: auto;
     aspect-ratio: 15 / 12; 
+<<<<<<< HEAD
+    background-image: url("fond.png");
+=======
     background-color: antiquewhite;
+>>>>>>> 84031c0ce5b703edd8d37f129f74f2726c5d9054
     background-size: cover;
     border-radius: 8px;
 }
